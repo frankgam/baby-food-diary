@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baby Food Diary</title>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF8EE;--card:#FFFDF8;--ink:#4A3F3A;--mut:#8A7B72;--pink:#F6CFD6;--pink2:#E58FA0;--sage:#A9BFA1;--sage2:#5E7A57;--beige:#EADFCB;--line:#EFE3D2;--warn:#B8423F;--warnbg:#FBE4E1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#2B2523;--card:#383130;--ink:#F3E9E2;--mut:#BBAAA0;--pink:#5A3A42;--pink2:#F2A1B2;--sage:#566B50;--sage2:#B9D1B1;--beige:#4A423A;--line:#4C4340;--warn:#FF9C96;--warnbg:#5A2E2C;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#2B2523;--card:#383130;--ink:#F3E9E2;--mut:#BBAAA0;--pink:#5A3A42;--pink2:#F2A1B2;--sage:#566B50;--sage2:#B9D1B1;--beige:#4A423A;--line:#4C4340;--warn:#FF9C96;--warnbg:#5A2E2C;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Noto Sans Thai',system-ui,sans-serif;padding-bottom:84px}
+h1,h2,h3{font-family:'Mali','Noto Sans Thai',sans-serif;margin:0 0 .4em;line-height:1.3}
+main{max-width:920px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:14px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.hero{display:flex;gap:14px;align-items:center;background:var(--pink);border-radius:28px}
+.av{width:84px;height:84px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:40px;object-fit:cover;flex:none;border:3px solid var(--card)}
+.btn{border:0;border-radius:999px;padding:9px 16px;font:inherit;font-weight:600;background:var(--sage);color:#2d3b29;cursor:pointer}
+.btn.p{background:var(--pink2);color:#fff}.btn.g{background:var(--beige);color:var(--ink)}.btn.s{padding:4px 11px;font-size:14px}.btn.d{background:var(--warnbg);color:var(--warn)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--pink2);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sp{justify-content:space-between}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:5;overflow-x:auto}
+nav button{flex:1;min-width:56px;border:0;background:none;font:inherit;font-size:12px;color:var(--mut);padding:4px;border-radius:14px;cursor:pointer}
+nav button b{display:block;font-size:20px}nav button.on{background:var(--pink);color:var(--ink);font-weight:600}
+.alert{background:var(--warnbg);color:var(--warn);border-radius:16px;padding:10px 14px;margin-bottom:10px;font-size:15px}
+.note{background:var(--beige);border-radius:16px;padding:10px 14px;font-size:14px;color:var(--mut)}
+.tag{display:inline-block;background:var(--beige);border-radius:999px;padding:1px 10px;font-size:13px;margin:2px 3px 2px 0}.tag.w{background:var(--warnbg);color:var(--warn)}.tag.ok{background:var(--sage);color:#2d3b29}
+.item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}
+.item img{width:64px;height:64px;border-radius:14px;object-fit:cover;flex:none}.mut{color:var(--mut);font-size:14px}
+.bar{height:9px;border-radius:9px;background:var(--beige);overflow:hidden}.bar i{display:block;height:100%;background:var(--sage2)}
+.nut{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}.nut div{background:var(--bg);border-radius:14px;padding:8px 10px}.nut b{font-size:18px;display:block}
+#modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;z-index:9}#modal.on{display:flex}
+#modal>div{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:18px}
+label{display:block;font-weight:600;font-size:14px;margin:10px 0 3px}
+input,select,textarea{width:100%;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink)}
+input[type=checkbox]{width:auto}.chk label{display:inline-flex;gap:5px;align-items:center;font-weight:400;margin:3px 10px 3px 0}
+.err{color:var(--warn);font-size:14px;margin-top:8px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.cal button{border:0;background:var(--card);border-radius:12px;padding:6px 0;font:inherit;font-size:14px;cursor:pointer;color:var(--ink)}.cal button.has{background:var(--pink)}.cal button.sel{outline:2px solid var(--sage2)}
+.chart{display:flex;align-items:flex-end;gap:6px;height:110px;margin:10px 0 4px}.chart div{flex:1;background:var(--pink2);border-radius:8px 8px 3px 3px;min-height:2px;position:relative}.chart span{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:12px}.lbl{display:flex;gap:6px}.lbl span{flex:1;text-align:center;font-size:12px;color:var(--mut)}
+.ill{font-size:44px;width:72px;height:72px;border-radius:18px;background:var(--pink);display:grid;place-items:center;flex:none}
+@media print{nav,.btn,#modal,.noprint{display:none!important}body{background:#fff;color:#000}}
+</style></head><body>
+<main id="app"></main><div id="modal"></div>
+<nav id="nav"></nav>
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const ST={mode:'real'};try{ST.mode=localStorage.getItem('bfd_mode')||'real'}catch(e){}
+const MEM={};
+const key=()=>'bfd_'+ST.mode;
+function load(){try{const r=localStorage.getItem(key());if(r)return JSON.parse(r)}catch(e){if(MEM[key()])return JSON.parse(MEM[key()])}return null}
+function save(){const s=JSON.stringify(db);try{localStorage.setItem(key(),s)}catch(e){MEM[key()]=s;toast('บันทึกลงเครื่องไม่ได้ (พื้นที่เต็ม) ข้อมูลอยู่ชั่วคราว')}}
+const uid=()=>Math.random().toString(36).slice(2,10);
+const pad=n=>String(n).padStart(2,'0');
+const dstr=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const nowL=()=>{const d=new Date();return dstr(d)+'T'+pad(d.getHours())+':'+pad(d.getMinutes())};
+const today=()=>dstr(new Date());
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=s=>{const d=new Date(s);return d.toLocaleString('th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})};
+const r1=n=>Math.round(n*10)/10;
+// Nutrition per 100 g: [kcal,protein,carb,fat,fiber,iron mg,calcium mg,allergen tag] — approximate reference values
+const NDB={'ข้าวสวย':[130,2.7,28,.3,.4,.2,10],'ข้าวโอ๊ตสุก':[71,2.5,12,1.5,1.7,.9,9],'ไข่แดง':[322,16,3.6,27,0,2.7,129,'ไข่'],'ไข่ไก่ทั้งฟอง':[143,12.6,.7,9.5,0,1.8,56,'ไข่'],'ตับไก่':[119,17,.7,4.8,0,9,8],'เนื้อปลา':[128,26,0,2.7,0,.6,10,'ปลา'],'อกไก่':[120,22,0,3,0,.7,11],'หมูสับ':[143,21,0,6,0,1,10],'เต้าหู้ขาว':[76,8,1.9,4.8,.3,5.4,350,'ถั่วเหลือง'],'ฟักทอง':[26,1,6.5,.1,.5,.8,21],'แครอท':[41,.9,10,.2,2.8,.3,33],'กล้วยสุก':[89,1.1,23,.3,2.6,.3,5],'อะโวคาโด':[160,2,9,15,7,.6,12],'บรอคโคลี':[34,2.8,7,.4,2.6,.7,47],'มันเทศ':[86,1.6,20,.1,3,.6,30],'ผักโขม':[23,2.9,3.6,.4,2.2,2.7,99],'โยเกิร์ตธรรมชาติ':[61,3.5,4.7,3.3,0,.1,121,'นมวัว'],'น้ำมันรำข้าว':[884,0,0,100,0,0,0]};
+const NK=['พลังงาน (kcal)','โปรตีน (g)','คาร์โบไฮเดรต (g)','ไขมัน (g)','ใยอาหาร (g)','ธาตุเหล็ก (mg)','แคลเซียม (mg)'];
+const MILK=['นมแม่','นมผง สูตร 1','นมผง สูตร 2','นมผง สูตร 3','นมสูตรพิเศษ (แพทย์สั่ง)','นมวัวจืด/UHT','อื่น ๆ'];
+const MENU=[
+{id:1,a:6,e:'🎃',n:'ฟักทองบดละเอียด',d:'ง่าย',ing:[['ฟักทอง',40]],st:['นึ่งฟักทองจนนิ่ม','บดให้เนียน ปรับความข้นด้วยนมที่ลูกทานหรือน้ำต้มสุก'],tx:'บดละเอียด เหลวข้นพอตักได้',ch:'ไม่มีชิ้น ไม่เติมเกลือ/น้ำตาล'},
+{id:2,a:6,e:'🥣',n:'โจ๊กข้าวไข่แดง',d:'ง่าย',ing:[['ข้าวสวย',30],['ไข่แดง',10],['แครอท',15]],st:['ต้มข้าวกับน้ำจนเละ','ใส่แครอทนึ่งบด','ใส่ไข่แดงสุกบดละเอียดคนให้เข้ากัน'],tx:'บดละเอียด/ข้นนุ่ม',ch:'ไข่ควรสุกทั่วถึง'},
+{id:3,a:9,e:'🐟',n:'ข้าวต้มปลาบรอคโคลี',d:'ปานกลาง',ing:[['ข้าวสวย',50],['เนื้อปลา',20],['บรอคโคลี',15]],st:['ต้มข้าวให้นุ่ม','นึ่งปลาแล้วแกะก้างออกให้หมด','สับปลาและบรอคโคลีละเอียดผสมลงข้าว'],tx:'สับ/ขยี้ให้ชิ้นเล็กนุ่ม',ch:'ระวังก้างปลา ตรวจซ้ำทุกครั้ง'},
+{id:4,a:9,e:'🍌',n:'โอ๊ตกล้วยอะโวคาโด',d:'ง่าย',ing:[['ข้าวโอ๊ตสุก',60],['กล้วยสุก',25],['อะโวคาโด',20]],st:['ต้มข้าวโอ๊ตจนนุ่ม','ขยี้กล้วยและอะโวคาโดผสม'],tx:'ขยี้หยาบ ชิ้นนุ่มมาก',ch:'อย่าให้กล้วยเป็นชิ้นกลมใหญ่'},
+{id:5,a:12,e:'🥕',n:'ข้าวหมูสับตับไก่ผักรวม',d:'ปานกลาง',ing:[['ข้าวสวย',70],['หมูสับ',20],['ตับไก่',10],['แครอท',15],['ผักโขม',10]],st:['ต้มข้าวให้นุ่ม','ผัดหมู ตับ ผักด้วยน้ำมันเล็กน้อยหรือต้มน้ำ','สับละเอียดแล้วผสมกับข้าว'],tx:'ชิ้นเล็กไม่เกิน 0.5 ซม. นุ่ม',ch:'ตับให้ไม่เกินสัปดาห์ละ 1–2 ครั้ง'},
+{id:6,a:12,e:'🧈',n:'เต้าหู้ตุ๋นไก่ฟักทอง',d:'ง่าย',ing:[['เต้าหู้ขาว',50],['อกไก่',25],['ฟักทอง',30]],st:['สับไก่ละเอียดผสมเต้าหู้','ใส่ฟักทองหั่นเต๋าเล็ก','นึ่ง 15 นาที'],tx:'ชิ้นเล็กนุ่ม ใช้ช้อนตัดได้',ch:'หั่นชิ้นเล็ก ไม่แข็ง'},
+{id:7,a:24,e:'🍳',n:'ข้าวผัดไก่มันเทศ (ไม่เค็ม)',d:'ปานกลาง',ing:[['ข้าวสวย',80],['อกไก่',30],['มันเทศ',25],['ไข่ไก่ทั้งฟอง',25],['น้ำมันรำข้าว',3]],st:['ผัดไก่และมันเทศหั่นเต๋าเล็ก','ใส่ไข่และข้าว ผัดจนสุก','ปรุงรสอ่อน ๆ ด้วยผัก ไม่ใส่ซีอิ๊ว'],tx:'ชิ้นเล็กพอดีคำ นุ่ม',ch:'หลีกเลี่ยงถั่วเม็ดเล็ก องุ่นทั้งผล'},
+{id:8,a:36,e:'🥑',n:'ข้าวหน้าไก่อะโวคาโดผักนึ่ง',d:'ง่าย',ing:[['ข้าวสวย',90],['อกไก่',40],['อะโวคาโด',30],['บรอคโคลี',30],['โยเกิร์ตธรรมชาติ',40]],st:['ต้มหรือย่างไก่ฉีกเป็นเส้น','นึ่งบรอคโคลี','เสิร์ฟพร้อมอะโวคาโดและโยเกิร์ต'],tx:'ชิ้นพอดีคำ เคี้ยวง่าย',ch:'ระวังผลไม้กลมแข็ง ถั่วเม็ด ป๊อปคอร์น'}];
+const AGES=[[6,'6–8 เดือน'],[9,'9–11 เดือน'],[12,'12–23 เดือน'],[24,'2–3 ปี'],[36,'3 ปีขึ้นไป']];
+const ageGrp=m=>m>=36?36:m>=24?24:m>=12?12:m>=9?9:6;
+const ageM=b=>{const d=new Date(b.dob),n=new Date();let m=(n.getFullYear()-d.getFullYear())*12+n.getMonth()-d.getMonth();if(n.getDate()<d.getDate())m--;return Math.max(m,0)};
+const ageTxt=b=>{const m=ageM(b);return m>=24?Math.floor(m/12)+' ปี '+(m%12)+' เดือน':m+' เดือน'};
+
+let db=load();
+function seed(){const dob=new Date();dob.setMonth(dob.getMonth()-8);const bid='b1';const f=[],now=new Date();
+const mk=(off,h,m,n,ing,e,ap)=>{const d=new Date(now);d.setDate(d.getDate()-off);d.setHours(h,m);return{id:uid(),baby:bid,dt:dstr(d)+'T'+pad(h)+':'+pad(m),name:n,ing,eaten:e,appetite:ap,sym:'ไม่มี',note:'ข้อมูลตัวอย่าง',photo:''}};
+for(let i=0;i<5;i++){f.push(mk(i,8,30,'โจ๊กข้าวไข่แดง',[{n:'ข้าวสวย',g:30},{n:'ไข่แดง',g:10},{n:'แครอท',g:15}],45+i*3,'ดี'));f.push(mk(i,17,0,'ฟักทองบดละเอียด',[{n:'ฟักทอง',g:40}],30,i%2?'ปานกลาง':'ดี'))}
+return{babies:[{id:bid,nick:'น้องมะลิ',name:'ตัวอย่าง ทดลองใช้',dob:dstr(dob),sex:'หญิง',w:8.1,h:69,allergyNote:'',milk:'นมแม่',photo:''}],cur:bid,food:f,vac:[{id:uid(),baby:bid,name:'ไข้หวัดใหญ่',status:'นัดฉีด',date:dstr(new Date(Date.now()+3*864e5)),dose:'1',next:'',place:'สถานพยาบาลตัวอย่าง',note:'ข้อมูลตัวอย่าง'},{id:uid(),baby:bid,name:'DTP-HB-Hib',status:'ฉีดแล้ว',date:dstr(new Date(Date.now()-60*864e5)),dose:'2',next:'',place:'สถานพยาบาลตัวอย่าง',note:'ไม่มีผลข้างเคียง'}],ill:[{id:uid(),baby:bid,date:dstr(new Date(Date.now()-12*864e5)),name:'ไข้หวัด',sym:'น้ำมูก ไอเล็กน้อย',temp:37.8,status:'หายแล้ว',doc:'',med:'',note:'ข้อมูลตัวอย่าง'}],milk:[{id:uid(),baby:bid,dt:nowL(),type:'นมแม่',ml:'',mins:15,note:'ตัวอย่าง'},{id:uid(),baby:bid,dt:nowL(),type:'นมแม่',ml:120,mins:'',note:'ตัวอย่าง (ปั๊ม)'}],alg:[{id:uid(),baby:bid,food:'กุ้ง',dt:nowL(),sym:'ผื่นแดง รอบปาก',after:30,sev:'เล็กน้อย',doc:'ยังไม่ได้ยืนยัน',note:'ตัวอย่าง',photo:''}],
+stool:[0,0,1,2,3,4].map(o=>{const d=new Date(now);d.setDate(d.getDate()-o);return{id:uid(),baby:bid,dt:dstr(d)+'T10:00',type:'นิ่ม',color:'เหลือง',sym:[],note:'',photo:''}})}}
+if(!db){db=ST.mode==='demo'?seed():{babies:[],cur:null,food:[],alg:[],stool:[]};save()}
+const norm=()=>{['vac','ill','milk','appt'].forEach(k=>db[k]=db[k]||[])};norm();
+function setMode(m){ST.mode=m;try{localStorage.setItem('bfd_mode',m)}catch(e){}db=load();if(!db){db=m==='demo'?seed():{babies:[],cur:null,food:[],alg:[],stool:[]};save()}norm();render()}
+const baby=()=>db.babies.find(b=>b.id===db.cur)||db.babies[0];
+const mine=k=>db[k].filter(x=>x.baby===(baby()||{}).id);
+function toast(t){const d=document.createElement('div');d.textContent=t;d.setAttribute('role','status');d.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;z-index:20';document.body.appendChild(d);setTimeout(()=>d.remove(),2400)}
+// nutrition
+function nutOf(f){const tot=f.ing.reduce((s,i)=>s+i.g,0),sc=f.eaten&&tot?f.eaten/tot:1,o=Array(7).fill(0);f.ing.forEach(i=>{const v=NDB[i.n];if(v)for(let k=0;k<7;k++)o[k]+=v[k]*i.g/100*sc});return o}
+const sumN=l=>l.reduce((a,f)=>{nutOf(f).forEach((v,k)=>a[k]+=v);return a},Array(7).fill(0));
+const avoid=()=>mine('alg').filter(a=>a.doc!=='แพทย์ยืนยันว่าไม่แพ้').map(a=>a.food.trim()).filter(Boolean);
+const hits=names=>{const av=avoid();return names.filter(n=>av.some(a=>n.includes(a)||a.includes(n)||(NDB[n]&&NDB[n][7]&&a.includes(NDB[n][7]))))};
+// ui state
+let tab='home',calOff=0,selDay=null,rpt='week';
+const TABS=[['home','🏠','หน้าหลัก'],['food','🍚','อาหาร'],['alg','⚠️','แพ้'],['stool','💩','ขับถ่าย'],['milk','🍼','นม'],['vac','💉','วัคซีน'],['ill','🤒','เจ็บป่วย'],['appt','📅','หมอนัด'],['menu','👶','เมนู'],['rep','📊','รายงาน']];
+function render(){
+$('#nav').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')"><b>${t[1]}</b>${t[2]}</button>`).join('');
+const a=$('#app');
+const top=`<div class="row sp noprint" style="margin-bottom:10px"><h2 style="margin:0">🍼 Baby Food Diary</h2><div class="row"><select aria-label="โหมดข้อมูล" onchange="setMode(this.value)" style="width:auto"><option value="real" ${ST.mode==='real'?'selected':''}>ข้อมูลจริง</option><option value="demo" ${ST.mode==='demo'?'selected':''}>ข้อมูลตัวอย่าง</option></select></div></div>`;
+if(!baby()){a.innerHTML=top+`<div class="card" style="text-align:center"><div style="font-size:60px">🍼</div><h2>ยินดีต้อนรับ</h2><p class="mut">เริ่มต้นด้วยการเพิ่มข้อมูลลูกน้อย (รองรับตั้งแต่อายุ 6 เดือน)</p><button class="btn p" onclick="editBaby()">เพิ่มลูกน้อย</button></div>`+disc();return}
+const bs=db.babies.length>1?`<select aria-label="เลือกลูก" onchange="db.cur=this.value;save();render()" style="width:auto;margin-bottom:10px">${db.babies.map(b=>`<option value="${b.id}" ${b.id===db.cur?'selected':''}>${esc(b.nick)}</option>`).join('')}</select>`:'';
+a.innerHTML=top+bs+({home:vHome,food:vFood,alg:vAlg,stool:vStool,menu:vMenu,rep:vRep,milk:vMilk,vac:vVac,ill:vIll,appt:vAppt})[tab]()+disc()}
+const go=t=>{tab=t;render();scrollTo(0,0)};
+const disc=()=>`<div class="note" style="margin-top:14px"><b>ข้อควรรู้:</b> แอปนี้เป็นเครื่องมือบันทึกข้อมูล ไม่ใช่การวินิจฉัยโรค ไม่ควรทดลองอาหารที่เคยสงสัยว่าแพ้ด้วยตนเอง หากลูกหายใจลำบาก หน้าหรือลิ้นบวม หรือซึมผิดปกติ ให้ไปฉุกเฉินทันที (โทร 1669) ไม่เติมเกลือ น้ำตาล หรือน้ำผึ้งให้เด็กอายุต่ำกว่า 1 ปี ระวังอาหารเสี่ยงสำลัก<br>ค่าโภชนาการเป็นค่าประมาณตามวัตถุดิบและปริมาณที่บันทึก อ้างอิงแนวทางจากตารางองค์ประกอบอาหารไทย (INMU/กรมอนามัย) และ USDA FoodData Central และคำแนะนำอาหารตามวัยของกรมอนามัย/WHO ควรปรึกษากุมารแพทย์</div>`;
+const avatar=b=>b.photo?`<img class="av" src="${b.photo}" alt="">`:`<div class="av">${b.sex==='ชาย'?'👦':'👧'}</div>`;
+function alerts(){const out=[],b=baby(),av=avoid();
+if(av.length)out.push('⚠️ อาหารที่ควรระวัง (เคยมีอาการ): '+av.map(esc).join(', '));
+const td=mine('food').filter(f=>f.dt.startsWith(today()));if(!td.length&&new Date().getHours()>=10)out.push('📝 วันนี้ยังไม่ได้บันทึกมื้ออาหาร');
+const st=mine('stool'),t=st.filter(s=>s.dt.startsWith(today()));
+if(t.filter(s=>['เหลว','เป็นน้ำ'].includes(s.type)).length>=3||t.some(s=>s.sym.includes('มีเลือดปน')||s.color==='แดง'||s.color==='ขาว/ซีด'))out.push('💧 พบบันทึกการขับถ่ายที่ควรสังเกต ถ้ากังวลหรือเป็นต่อเนื่อง ควรปรึกษาแพทย์ (แอปไม่วินิจฉัยโรค)');
+const last=st.map(s=>s.dt).sort().pop();if(st.length&&(Date.now()-new Date(last))/864e5>=3)out.push('🕒 ไม่มีบันทึกการขับถ่ายมากกว่า 3 วัน หากลูกถ่ายยากหรือไม่สบาย ควรปรึกษาแพทย์');
+const meals=['08:00','12:00','17:00'];const h=new Date().getHours();if(td.length<3&&[8,12,17].includes(h))out.push('🍽️ ใกล้เวลามื้ออาหารแล้ว');
+return vacRem().concat(apptRem(),out).map(x=>`<div class="alert">${x}</div>`).join('')}
+function nutBox(l){const s=sumN(l);return `<div class="nut">${NK.map((k,i)=>`<div><span class="mut">${k.split(' ')[0]}</span><b>${r1(s[i])}</b><span class="mut">${k.split(' ')[1]}</span></div>`).join('')}</div>`}
+function vHome(){const b=baby(),td=mine('food').filter(f=>f.dt.startsWith(today())),st=mine('stool').filter(s=>s.dt.startsWith(today()));
+const ms=okMenus(b),m=ms[new Date().getDate()%Math.max(ms.length,1)];
+return `<div class="card hero">${avatar(b)}<div style="flex:1"><h1 style="font-size:24px;margin:0">${esc(b.nick)}</h1><div>อายุ ${ageTxt(b)} · ${b.sex}</div><div class="mut" style="color:inherit">${b.w||'-'} กก. · ${b.h||'-'} ซม. · ${esc(b.milk)}</div><button class="btn g s" onclick="editBaby(db.cur)">แก้ไขโปรไฟล์</button> <button class="btn g s" onclick="editBaby()">+ เพิ่มลูก</button></div></div>
+${alerts()}<div class="card noprint"><h3>เพิ่มข้อมูลด่วน</h3><div class="row"><button class="btn p" onclick="editFood()">🍚 อาหาร</button><button class="btn" onclick="editAlg()">⚠️ อาการแพ้</button><button class="btn" onclick="editStool()">💩 ขับถ่าย</button><button class="btn" onclick="editMilk()">🍼 นม</button><button class="btn" onclick="editVac()">💉 วัคซีน</button><button class="btn" onclick="editIll()">🤒 เจ็บป่วย</button><button class="btn" onclick="editAppt()">📅 หมอนัด</button></div></div>
+<div class="grid"><div class="card"><h3>วันนี้ · ${td.length} มื้อ</h3>${td.length?td.map(f=>`<div>${esc(f.name)} <span class="mut">${f.dt.slice(11)} น.</span></div>`).join(''):'<p class="mut">ยังไม่มีบันทึก กด “อาหาร” ด้านบนได้เลย</p>'}</div>
+<div class="card"><h3>การขับถ่ายวันนี้ · ${st.length} ครั้ง</h3>${st.length?st.map(s=>`<div>${s.type} · ${s.color}</div>`).join(''):'<p class="mut">ยังไม่มีบันทึก</p>'}</div></div>
+<div class="card"><h3>นมวันนี้ · ${milkToday().length} ครั้ง</h3><p>${Math.round(milkToday().reduce((s,m)=>s+(+m.ml||0),0))} มล. (ไม่รวมนมแม่ที่บันทึกเป็นนาที)</p></div>
+<div class="card"><h3>สารอาหารวันนี้ (ค่าประมาณ)</h3>${nutBox(td)}</div>
+<div class="card"><h3>เมนูแนะนำวันนี้</h3>${m?menuCard(m,b):'<p class="mut">ไม่มีเมนูที่ปลอดภัยตามประวัติการแพ้</p>'}</div>`}
+// generic modal form
+function modal(html){const m=$('#modal');m.innerHTML=`<div role="dialog" aria-modal="true">${html}</div>`;m.classList.add('on')}
+const closeM=()=>$('#modal').classList.remove('on');
+const fld=(k,l,t,v='',o=[],r)=>{const id='f_'+k;v=v??'';let i;
+if(t==='select')i=`<select id="${id}">${o.map(x=>`<option ${x===v?'selected':''}>${x}</option>`).join('')}</select>`;
+else if(t==='dl')i=`<input id="${id}" list="${id}_l" value="${esc(v)}"><datalist id="${id}_l">${o.map(x=>`<option value="${x}">`).join('')}</datalist>`;
+else if(t==='area')i=`<textarea id="${id}" rows="2">${esc(v)}</textarea>`;
+else if(t==='chk')i=`<div class="chk" id="${id}">${o.map(x=>`<label><input type="checkbox" value="${x}" ${(v||[]).includes(x)?'checked':''}>${x}</label>`).join('')}</div>`;
+else if(t==='photo')i=`<input type="file" accept="image/*" onchange="pickPhoto(this,'${id}_p')"><img id="${id}_p" src="${v}" ${v?'':'hidden'} style="width:80px;height:80px;border-radius:14px;object-fit:cover;margin-top:6px" alt="">`;
+else i=`<input id="${id}" type="${t}" value="${esc(v)}" ${t==='number'?'step="any" inputmode="decimal"':''}>`;
+return `<label for="${id}">${l}${r?' *':''}</label>${i}`};
+function pickPhoto(inp,id){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,320/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);const p=$('#'+id);p.src=c.toDataURL('image/jpeg',.7);p.hidden=false};im.src=rd.result};rd.readAsDataURL(f)}
+const val=k=>{const e=$('#f_'+k);return e?e.value.trim():''};
+const chk=k=>[...document.querySelectorAll('#f_'+k+' input:checked')].map(x=>x.value);
+const pho=k=>{const p=$('#f_'+k+'_p');return p&&!p.hidden?p.src:''};
+const foot=(id)=>`<div class="err" id="err" role="alert"></div><div class="row" style="margin-top:14px"><button class="btn p" onclick="${id}">บันทึก</button><button class="btn g" onclick="closeM()">ยกเลิก</button></div>`;
+const bad=m=>{$('#err').textContent=m;return false};
+const upsert=(k,rec)=>{const i=db[k].findIndex(x=>x.id===rec.id);i>=0?db[k][i]=rec:db[k].push(rec);save();closeM();render();toast('บันทึกแล้ว')};
+const del=(k,id)=>{if(confirm('ลบรายการนี้?')){db[k]=db[k].filter(x=>x.id!==id);save();render();toast('ลบแล้ว')}};
+// baby
+function editBaby(id){const b=db.babies.find(x=>x.id===id)||{};modal(`<h2>${id?'แก้ไขโปรไฟล์':'เพิ่มลูกน้อย'}</h2>`+fld('nick','ชื่อเล่น','text',b.nick,0,1)+fld('name','ชื่อจริง','text',b.name)+fld('dob','วันเกิด','date',b.dob,0,1)+fld('sex','เพศ','select',b.sex,['หญิง','ชาย'])+fld('w','น้ำหนักล่าสุด (กก.)','number',b.w)+fld('h','ส่วนสูงล่าสุด (ซม.)','number',b.h)+fld('milk','ประเภทนม','select',b.milk,MILK)+fld('allergyNote','ประวัติแพ้อาหาร (เพิ่มเติม)','area',b.allergyNote)+fld('photo','รูปโปรไฟล์','photo',b.photo)+foot(`saveBaby('${b.id||''}')`))}
+function saveBaby(id){const nick=val('nick'),dob=val('dob'),w=val('w'),h=val('h');if(!nick)return bad('กรุณากรอกชื่อเล่น');if(!dob)return bad('กรุณาเลือกวันเกิด');if(new Date(dob)>new Date())return bad('วันเกิดต้องไม่เป็นอนาคต');
+if(w&&(w<1||w>40))return bad('น้ำหนักควรอยู่ระหว่าง 1–40 กก.');if(h&&(h<30||h>150))return bad('ส่วนสูงควรอยู่ระหว่าง 30–150 ซม.');
+const rec={id:id||uid(),nick,name:val('name'),dob,sex:val('sex'),w:+w||'',h:+h||'',milk:val('milk'),allergyNote:val('allergyNote'),photo:pho('photo')};
+const i=db.babies.findIndex(x=>x.id===rec.id);i>=0?db.babies[i]=rec:db.babies.push(rec);if(!db.cur||i<0)db.cur=rec.id;save();closeM();render();toast('บันทึกแล้ว');
+}
+function delBaby(){if(confirm('ลบโปรไฟล์นี้และข้อมูลทั้งหมดของลูก?')){const id=db.cur;db.babies=db.babies.filter(b=>b.id!==id);['food','alg','stool','vac','ill','milk','appt'].forEach(k=>db[k]=db[k].filter(x=>x.baby!==id));db.cur=db.babies[0]?.id||null;save();render()}}
+// food
+function ingRow(n='',g=''){const o=Object.keys(NDB).concat(['อื่น ๆ (ไม่คิดสารอาหาร)']);return `<div class="row ir" style="margin-bottom:6px"><select style="flex:2">${o.map(x=>`<option ${x===n?'selected':''}>${x}</option>`).join('')}</select><input type="number" placeholder="กรัม" value="${g}" style="flex:1" min="0"><button class="btn d s" type="button" onclick="this.parentNode.remove()">ลบ</button></div>`}
+function addIng(){$('#ings').insertAdjacentHTML('beforeend',ingRow())}
+function editFood(id){const f=db.food.find(x=>x.id===id)||{ing:[{n:'ข้าวสวย',g:30}]};
+modal(`<h2>${id?'แก้ไขมื้ออาหาร':'บันทึกมื้ออาหาร'}</h2>`+fld('dt','วันที่และเวลา','datetime-local',f.dt||nowL(),0,1)+fld('name','ชื่อเมนู','text',f.name,0,1)+`<label>ส่วนประกอบและปริมาณ (กรัม)</label><div id="ings">${f.ing.map(i=>ingRow(i.n,i.g)).join('')}</div><button class="btn g s" type="button" onclick="addIng()">+ เพิ่มวัตถุดิบ</button>`+fld('eaten','ปริมาณที่กินจริง (กรัม)','number',f.eaten)+fld('appetite','ระดับความอยากอาหาร','select',f.appetite,['ดีมาก','ดี','ปานกลาง','น้อย','ปฏิเสธอาหาร'])+fld('sym','อาการหลังรับประทาน','select',f.sym,['ไม่มี','ผื่น/คัน','อาเจียน','ท้องอืด/ปวดท้อง','ไอ/สำลัก','อื่น ๆ (ระบุในหมายเหตุ)'])+fld('note','หมายเหตุ','area',f.note)+fld('photo','รูปอาหาร','photo',f.photo)+foot(`saveFood('${f.id||''}')`))}
+function saveFood(id){const name=val('name'),dt=val('dt');if(!name)return bad('กรุณากรอกชื่อเมนู');if(!dt)return bad('กรุณาเลือกวันเวลา');
+const ing=[...document.querySelectorAll('.ir')].map(r=>({n:r.querySelector('select').value,g:+r.querySelector('input').value||0})).filter(i=>i.g>0);
+if(!ing.length)return bad('กรุณาใส่วัตถุดิบอย่างน้อย 1 รายการพร้อมปริมาณ');const eaten=+val('eaten')||0;if(eaten<0)return bad('ปริมาณต้องไม่ติดลบ');
+const h=hits(ing.map(i=>i.n));if(h.length&&!confirm('⚠️ พบวัตถุดิบที่เคยมีประวัติสงสัยแพ้: '+h.join(', ')+'\nไม่ควรทดลองให้เองโดยไม่ปรึกษาแพทย์ ต้องการบันทึกต่อหรือไม่?'))return false;
+upsert('food',{id:id||uid(),baby:baby().id,dt,name,ing,eaten,appetite:val('appetite'),sym:val('sym'),note:val('note'),photo:pho('photo')})}
+function vFood(){const all=mine('food').sort((a,b)=>b.dt.localeCompare(a.dt)),d0=new Date();d0.setDate(1);d0.setMonth(d0.getMonth()+calOff);const y=d0.getFullYear(),mo=d0.getMonth(),n=new Date(y,mo+1,0).getDate(),sp=d0.getDay();
+const has=new Set(all.map(f=>f.dt.slice(0,10)));let cal='';for(let i=0;i<sp;i++)cal+='<span></span>';
+for(let d=1;d<=n;d++){const s=y+'-'+pad(mo+1)+'-'+pad(d);cal+=`<button class="${has.has(s)?'has':''} ${selDay===s?'sel':''}" onclick="selDay=selDay==='${s}'?null:'${s}';render()">${d}</button>`}
+const l=selDay?all.filter(f=>f.dt.startsWith(selDay)):all.slice(0,30);
+return `<div class="row sp"><h2>ไดอารี่อาหาร</h2><button class="btn p" onclick="editFood()">+ เพิ่มมื้อ</button></div>
+<div class="card"><div class="row sp"><button class="btn g s" onclick="calOff--;render()">‹</button><b>${d0.toLocaleDateString('th-TH',{month:'long',year:'numeric'})}</b><button class="btn g s" onclick="calOff++;render()">›</button></div><div class="cal" style="margin-top:8px">${cal}</div><p class="mut">วันที่แรเงามีบันทึก แตะวันเพื่อกรอง</p></div>
+<div class="card">${l.length?l.map(f=>{const N=nutOf(f),h=hits(f.ing.map(i=>i.n));return `<div class="item">${f.photo?`<img src="${f.photo}" alt="">`:'<div class="ill" style="width:64px;height:64px">🍚</div>'}<div style="flex:1"><b>${esc(f.name)}</b> <span class="mut">${fmt(f.dt)}</span><div>${f.ing.map(i=>`<span class="tag ${h.includes(i.n)?'w':''}">${esc(i.n)} ${i.g}g</span>`).join('')}</div><div class="mut">กิน ${f.eaten||'-'} ก. · ${f.appetite} · อาการ: ${esc(f.sym)} · ~${Math.round(N[0])} kcal</div>${f.note?`<div class="mut">${esc(f.note)}</div>`:''}<div class="row" style="margin-top:4px"><button class="btn g s" onclick="editFood('${f.id}')">แก้ไข</button><button class="btn d s" onclick="del('food','${f.id}')">ลบ</button></div></div></div>`}).join(''):'<p class="mut">ยังไม่มีบันทึกอาหาร กด “+ เพิ่มมื้อ” เพื่อเริ่มต้น</p>'}</div>`}
+// allergy
+function editAlg(id){const a=db.alg.find(x=>x.id===id)||{};modal(`<h2>${id?'แก้ไขบันทึก':'บันทึกอาหารที่สงสัยว่าแพ้'}</h2>`+fld('food','ชื่ออาหาร/วัตถุดิบ','text',a.food,0,1)+fld('dt','วันและเวลาที่รับประทาน','datetime-local',a.dt||nowL(),0,1)+fld('sym','อาการที่เกิดขึ้น','area',a.sym,0,1)+fld('after','เกิดอาการหลังกินกี่นาที','number',a.after)+fld('sev','ระดับความรุนแรง','select',a.sev,['เล็กน้อย','ปานกลาง','รุนแรง (ควรพบแพทย์ทันที)'])+fld('doc','สถานะการยืนยันจากแพทย์','select',a.doc,['ยังไม่ได้ยืนยัน','แพทย์ยืนยันว่าแพ้','แพทย์ยืนยันว่าไม่แพ้'])+fld('note','หมายเหตุ','area',a.note)+fld('photo','ภาพอาการ','photo',a.photo)+`<div class="note" style="margin-top:10px">แอปไม่วินิจฉัยหรือยืนยันการแพ้ ควรปรึกษาแพทย์ก่อนทดลองให้อาหารนี้อีก</div>`+foot(`saveAlg('${a.id||''}')`))}
+function saveAlg(id){const food=val('food'),sym=val('sym'),af=val('after');if(!food)return bad('กรุณากรอกชื่ออาหาร');if(!sym)return bad('กรุณาระบุอาการ');if(af&&+af<0)return bad('ระยะเวลาต้องไม่ติดลบ');
+upsert('alg',{id:id||uid(),baby:baby().id,food,dt:val('dt'),sym,after:+af||'',sev:val('sev'),doc:val('doc'),note:val('note'),photo:pho('photo')})}
+function vAlg(){const l=mine('alg').sort((a,b)=>b.dt.localeCompare(a.dt)),av=avoid();
+return `<div class="row sp"><h2>ติดตามการแพ้อาหาร</h2><button class="btn p" onclick="editAlg()">+ บันทึก</button></div>
+<div class="card"><h3>รายการที่ควรหลีกเลี่ยง</h3>${av.length?av.map(a=>`<span class="tag w">${esc(a)}</span>`).join(''):'<p class="mut">ยังไม่มีรายการ</p>'}<p class="mut">เมนูแนะนำจะไม่รวมวัตถุดิบเหล่านี้</p></div>
+<div class="card">${l.length?l.map(a=>`<div class="item">${a.photo?`<img src="${a.photo}" alt="">`:''}<div style="flex:1"><b>${esc(a.food)}</b> <span class="tag ${a.doc==='แพทย์ยืนยันว่าแพ้'?'ok':''}">${a.doc}</span><div>${esc(a.sym)}</div><div class="mut">${fmt(a.dt)} · หลังกิน ${a.after||'-'} นาที · ${a.sev}</div>${a.note?`<div class="mut">${esc(a.note)}</div>`:''}<div class="row"><button class="btn g s" onclick="editAlg('${a.id}')">แก้ไข</button><button class="btn d s" onclick="del('alg','${a.id}')">ลบ</button></div></div></div>`).join(''):'<p class="mut">ยังไม่มีบันทึก</p>'}</div>`}
+// stool
+const ST_T=['แข็งเป็นก้อน','ปกติ','นิ่ม','เหลว','เป็นน้ำ'],ST_C=['เหลือง','น้ำตาล','เขียว','ดำ','แดง','ขาว/ซีด'];
+function editStool(id){const s=db.stool.find(x=>x.id===id)||{sym:[]};modal(`<h2>${id?'แก้ไขการขับถ่าย':'บันทึกการขับถ่าย'}</h2>`+fld('dt','วันที่และเวลา','datetime-local',s.dt||nowL(),0,1)+fld('type','ลักษณะ/ความแข็ง-เหลว','select',s.type,ST_T)+fld('color','สี','select',s.color,ST_C)+fld('sym','อาการร่วม','chk',s.sym,['เบ่ง','ถ่ายยาก','ท้องเสีย','มีมูก','มีเลือดปน'])+fld('note','หมายเหตุ','area',s.note)+fld('photo','ภาพประกอบ (ไม่บังคับ)','photo',s.photo)+foot(`saveStool('${s.id||''}')`))}
+function saveStool(id){if(!val('dt'))return bad('กรุณาเลือกวันเวลา');upsert('stool',{id:id||uid(),baby:baby().id,dt:val('dt'),type:val('type'),color:val('color'),sym:chk('sym'),note:val('note'),photo:pho('photo')})}
+function days(n){const o=[];for(let i=n-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);o.push(dstr(d))}return o}
+function chartH(vals,labs,u=''){const mx=Math.max(...vals,1);return `<div class="chart" role="img" aria-label="กราฟแท่ง">${vals.map(v=>`<div style="height:${v/mx*100}%"><span>${v?Math.round(v)+u:''}</span></div>`).join('')}</div><div class="lbl">${labs.map(l=>`<span>${l}</span>`).join('')}</div>`}
+const dl=d=>+d.slice(8)+'/'+ +d.slice(5,7);
+function vStool(){const l=mine('stool').sort((a,b)=>b.dt.localeCompare(a.dt)),ds=days(7);
+return `<div class="row sp"><h2>ไดอารี่การขับถ่าย</h2><button class="btn p" onclick="editStool()">+ บันทึก</button></div>
+<div class="card"><h3>ความถี่ 7 วันล่าสุด</h3>${chartH(ds.map(d=>l.filter(s=>s.dt.startsWith(d)).length),ds.map(dl),'')}</div>
+<div class="card">${l.length?l.slice(0,40).map(s=>`<div class="item"><div class="ill" style="width:56px;height:56px;font-size:28px">💩</div><div style="flex:1"><b>${s.type}</b> · ${s.color} <span class="mut">${fmt(s.dt)}</span><div>${s.sym.map(x=>`<span class="tag w">${x}</span>`).join('')}</div>${s.note?`<div class="mut">${esc(s.note)}</div>`:''}${s.photo?`<img src="${s.photo}" style="width:64px;height:64px;border-radius:12px" alt="">`:''}<div class="row"><button class="btn g s" onclick="editStool('${s.id}')">แก้ไข</button><button class="btn d s" onclick="del('stool','${s.id}')">ลบ</button></div></div></div>`).join(''):'<p class="mut">ยังไม่มีบันทึก</p>'}</div>`}
+// menu
+function okMenus(b){const g=ageGrp(ageM(b));return MENU.filter(m=>m.a<=g&&m.a>=Math.min(g,12)-(g>=12?0:0)&&!hits(m.ing.map(i=>i[0])).length).filter(m=>g<12?m.a===g||m.a===g:m.a>=12&&m.a<=g)}
+function menuCard(m,b){const nn=sumN([{ing:m.ing.map(i=>({n:i[0],g:i[1]})),eaten:0}]);return `<div class="item"><div class="ill">${m.e}</div><div style="flex:1"><b>${m.n}</b> <span class="tag">ยาก: ${m.d}</span><div>${m.ing.map(i=>`<span class="tag">${i[0]} ${i[1]}g</span>`).join('')}</div><div class="mut">~${Math.round(nn[0])} kcal · โปรตีน ${r1(nn[1])} g · เหล็ก ${r1(nn[5])} mg · แคลเซียม ${Math.round(nn[6])} mg</div><details><summary>วิธีทำ</summary><ol>${m.st.map(s=>`<li>${s}</li>`).join('')}</ol><div><b>เนื้อสัมผัส:</b> ${m.tx}</div><div class="alert" style="margin-top:6px">🚨 เสี่ยงสำลัก: ${m.ch}</div></details><button class="btn g s noprint" onclick="useMenu(${m.id})">บันทึกว่ากินเมนูนี้</button></div></div>`}
+function useMenu(id){const m=MENU.find(x=>x.id===id);db.food.push({id:uid(),baby:baby().id,dt:nowL(),name:m.n,ing:m.ing.map(i=>({n:i[0],g:i[1]})),eaten:0,appetite:'ดี',sym:'ไม่มี',note:'จากเมนูแนะนำ',photo:''});save();toast('เพิ่มในไดอารี่แล้ว');render()}
+function vMenu(){const b=baby(),g=ageGrp(ageM(b)),ls=MENU.filter(m=>(g<12?m.a===g:m.a>=12&&m.a<=g));const safe=ls.filter(m=>!hits(m.ing.map(i=>i[0])).length),blocked=ls.length-safe.length;
+return `<h2>เมนูแนะนำตามวัย</h2><div class="note">ช่วงวัยของ${esc(b.nick)}: <b>${AGES.find(a=>a[0]===g)[1]}</b>${blocked?` · ซ่อน ${blocked} เมนูที่มีวัตถุดิบตรงกับประวัติแพ้`:''}</div><div class="card" style="margin-top:12px">${safe.length?safe.map(m=>menuCard(m,b)).join(''):'<p class="mut">ยังไม่มีเมนูที่เหมาะกับช่วงวัยนี้และปลอดภัยตามประวัติแพ้</p>'}</div>${ageM(b)<6?'<div class="alert">แอปรองรับเด็กตั้งแต่ 6 เดือนขึ้นไป โปรดปรึกษาแพทย์เรื่องการเริ่มอาหารเสริม</div>':''}`}
+// report
+function vRep(){const n=rpt==='day'?1:rpt==='week'?7:30,ds=days(n),f=mine('food'),s=mine('stool');const inP=l=>l.filter(x=>ds.includes(x.dt.slice(0,10)));const F=inP(f),S=inP(s);
+const kc=ds.map(d=>sumN(f.filter(x=>x.dt.startsWith(d)))[0]);const avg=sumN(F).map(v=>v/n);
+return `<div class="row sp noprint"><h2>รายงาน</h2><div class="row"><select onchange="rpt=this.value;render()" style="width:auto" aria-label="ช่วงเวลา">${[['day','รายวัน'],['week','รายสัปดาห์'],['month','รายเดือน']].map(x=>`<option value="${x[0]}" ${rpt===x[0]?'selected':''}>${x[1]}</option>`).join('')}</select><button class="btn" onclick="window.print()">พิมพ์ / บันทึก PDF</button></div></div>
+<h3 style="margin-top:0">${esc(baby().nick)} · ${ageTxt(baby())}</h3>
+<div class="card"><h3>แนวโน้มพลังงานรายวัน (kcal)</h3>${n>1?chartH(kc,ds.map(dl),''):`<b>${Math.round(kc[0])} kcal</b>`}</div>
+<div class="card"><h3>สารอาหารเฉลี่ยต่อวัน (ค่าประมาณ)</h3>${nutBox(F.length?F.map(x=>({...x,_:1})):[]).replace(/<b>([\d.]+)<\/b>/g,(m,v)=>`<b>${r1(v/n)}</b>`)}<p class="mut">${F.length} มื้อในช่วงนี้</p></div>
+<div class="card"><h3>การขับถ่าย</h3><p>${S.length} ครั้ง · ${ST_T.map(t=>S.filter(x=>x.type===t).length?`${t} ${S.filter(x=>x.type===t).length}`:'').filter(Boolean).join(', ')||'ไม่มีข้อมูล'}</p></div>
+<div class="card"><h3>ประวัติแพ้อาหาร</h3>${mine('alg').map(a=>`<div>${esc(a.food)} — ${esc(a.sym)} <span class="mut">(${a.doc})</span></div>`).join('')||'<p class="mut">ไม่มีข้อมูล</p>'}</div>
+<div class="card"><h3>ประวัติวัคซีน</h3>${mine('vac').sort((a,b)=>b.date.localeCompare(a.date)).map(v=>`<div>${v.date} · ${esc(v.name)} <span class="mut">(${v.status})</span></div>`).join('')||'<p class="mut">ไม่มีข้อมูล</p>'}</div>
+<div class="card"><h3>ประวัติการเจ็บป่วย</h3>${mine('ill').sort((a,b)=>b.date.localeCompare(a.date)).map(v=>`<div>${v.date} · ${esc(v.name)} <span class="mut">(${v.status})</span></div>`).join('')||'<p class="mut">ไม่มีข้อมูล</p>'}</div>
+<div class="card"><h3>นัดหมอ</h3>${mine('appt').sort((a,b)=>b.date.localeCompare(a.date)).map(v=>`<div>${v.date} · ${esc(v.reason)} · ${esc(v.dr)} <span class="mut">(${v.status})</span></div>`).join('')||'<p class="mut">ไม่มีข้อมูล</p>'}</div>
+<div class="card noprint"><button class="btn d" onclick="delBaby()">ลบโปรไฟล์ลูกคนนี้</button></div>`}
+// vaccine
+const VAC=['BCG','ตับอักเสบบี (HBV)','DTP-HB-Hib','โปลิโอ (OPV/IPV)','โรตา (Rotavirus)','หัด-คางทูม-หัดเยอรมัน (MMR)','ไข้สมองอักเสบ (JE)','ไข้หวัดใหญ่','นิวโมคอคคัส (PCV)','ตับอักเสบเอ','สุกใส'];
+const dd=d=>Math.round((new Date(d+'T00:00')-new Date(today()+'T00:00'))/864e5);
+function vacRem(){const o=[];mine('vac').forEach(v=>{const d=v.status==='นัดฉีด'?v.date:v.next;if(!d)return;const n=dd(d);if(n<0&&v.status==='นัดฉีด')o.push(`💉 เลยกำหนดนัด ${esc(v.name)} (${d}) กรุณานัดหมายใหม่กับสถานพยาบาล`);else if(n>=0&&n<=7)o.push(`💉 นัดฉีด ${esc(v.name)} ${n===0?'วันนี้':'อีก '+n+' วัน'} (${d})`)});return o}
+function editVac(id){const v=db.vac.find(x=>x.id===id)||{};modal(`<h2>${id?'แก้ไขวัคซีน':'บันทึกวัคซีน'}</h2>`+fld('name','ชื่อวัคซีน','dl',v.name,VAC,1)+fld('status','สถานะ','select',v.status,['ฉีดแล้ว','นัดฉีด'])+fld('date','วันที่ฉีด / วันนัด','date',v.date||today(),0,1)+fld('dose','เข็มที่','text',v.dose)+fld('next','วันนัดครั้งถัดไป (ถ้ามี จะแจ้งเตือนล่วงหน้า 7 วัน)','date',v.next)+fld('place','สถานที่','text',v.place)+fld('note','หมายเหตุ / อาการหลังฉีด','area',v.note)+`<div class="note" style="margin-top:10px">ตารางวัคซีนที่เหมาะสมให้ดูจากสมุดบันทึกสุขภาพเด็กหรือสอบถามแพทย์</div>`+foot(`saveVac('${v.id||''}')`))}
+function saveVac(id){const name=val('name'),date=val('date'),st=val('status'),nx=val('next');if(!name)return bad('กรุณากรอกชื่อวัคซีน');if(!date)return bad('กรุณาเลือกวันที่');if(st==='ฉีดแล้ว'&&dd(date)>0)return bad('วันที่ฉีดแล้วต้องไม่เป็นอนาคต หากเป็นวันนัดให้เลือกสถานะ “นัดฉีด”');if(nx&&nx<=date)return bad('วันนัดครั้งถัดไปต้องหลังวันที่ฉีด');upsert('vac',{id:id||uid(),baby:baby().id,name,status:st,date,dose:val('dose'),next:nx,place:val('place'),note:val('note')})}
+function vVac(){const l=mine('vac').sort((a,b)=>b.date.localeCompare(a.date)),up=vacRem();return `<div class="row sp"><h2>ประวัติวัคซีน</h2><button class="btn p" onclick="editVac()">+ บันทึก</button></div>${up.map(x=>`<div class="alert">${x}</div>`).join('')}<div class="card">${l.length?l.map(v=>`<div class="item"><div class="ill" style="width:56px;height:56px;font-size:28px">💉</div><div style="flex:1"><b>${esc(v.name)}</b> <span class="tag ${v.status==='ฉีดแล้ว'?'ok':'w'}">${v.status}</span><div class="mut">${v.date}${v.dose?' · เข็มที่ '+esc(v.dose):''}${v.place?' · '+esc(v.place):''}${v.next?' · นัดต่อ '+v.next:''}</div>${v.note?`<div class="mut">${esc(v.note)}</div>`:''}<div class="row"><button class="btn g s" onclick="editVac('${v.id}')">แก้ไข</button><button class="btn d s" onclick="del('vac','${v.id}')">ลบ</button></div></div></div>`).join(''):'<p class="mut">ยังไม่มีบันทึกวัคซีน กด “+ บันทึก” เพื่อเริ่มต้น</p>'}</div>`}
+// illness
+function editIll(id){const v=db.ill.find(x=>x.id===id)||{};modal(`<h2>${id?'แก้ไขประวัติเจ็บป่วย':'บันทึกการเจ็บป่วย'}</h2>`+fld('date','วันที่เริ่มป่วย','date',v.date||today(),0,1)+fld('name','โรค/อาการหลัก','text',v.name,0,1)+fld('sym','รายละเอียดอาการ','area',v.sym)+fld('temp','อุณหภูมิสูงสุด (°C)','number',v.temp)+fld('status','สถานะ','select',v.status,['กำลังป่วย','หายแล้ว'])+fld('doc','แพทย์/สถานพยาบาล','text',v.doc)+fld('med','ยาที่ได้รับ (ตามที่แพทย์สั่ง)','area',v.med)+fld('note','หมายเหตุ','area',v.note)+foot(`saveIll('${v.id||''}')`))}
+function saveIll(id){const name=val('name'),date=val('date'),t=val('temp');if(!name)return bad('กรุณากรอกโรค/อาการ');if(!date)return bad('กรุณาเลือกวันที่');if(dd(date)>0)return bad('วันที่ต้องไม่เป็นอนาคต');if(t&&(+t<34||+t>43))return bad('อุณหภูมิควรอยู่ระหว่าง 34–43 °C');upsert('ill',{id:id||uid(),baby:baby().id,date,name,sym:val('sym'),temp:+t||'',status:val('status'),doc:val('doc'),med:val('med'),note:val('note')})}
+function vIll(){const l=mine('ill').sort((a,b)=>b.date.localeCompare(a.date));return `<div class="row sp"><h2>ประวัติการเจ็บป่วย</h2><button class="btn p" onclick="editIll()">+ บันทึก</button></div><div class="card">${l.length?l.map(v=>`<div class="item"><div class="ill" style="width:56px;height:56px;font-size:28px">🤒</div><div style="flex:1"><b>${esc(v.name)}</b> <span class="tag ${v.status==='หายแล้ว'?'ok':'w'}">${v.status}</span><div class="mut">${v.date}${v.temp?' · ไข้สูงสุด '+v.temp+' °C':''}${v.doc?' · '+esc(v.doc):''}</div>${v.sym?`<div>${esc(v.sym)}</div>`:''}${v.med?`<div class="mut">ยา: ${esc(v.med)}</div>`:''}${v.note?`<div class="mut">${esc(v.note)}</div>`:''}<div class="row"><button class="btn g s" onclick="editIll('${v.id}')">แก้ไข</button><button class="btn d s" onclick="del('ill','${v.id}')">ลบ</button></div></div></div>`).join(''):'<p class="mut">ยังไม่มีประวัติการเจ็บป่วย</p>'}</div><div class="note">หากลูกมีไข้สูง ซึม หายใจลำบาก หรือกินไม่ได้ ควรพบแพทย์ แอปนี้ใช้บันทึกข้อมูลเท่านั้น</div>`}
+// milk
+const milkToday=()=>mine('milk').filter(m=>m.dt.startsWith(today()));
+function editMilk(id){const v=db.milk.find(x=>x.id===id)||{};modal(`<h2>${id?'แก้ไขการกินนม':'บันทึกการกินนม'}</h2>`+fld('dt','วันที่และเวลา','datetime-local',v.dt||nowL(),0,1)+fld('type','ประเภทนม','select',v.type||baby().milk,MILK)+fld('ml','ปริมาณ (มล.)','number',v.ml)+fld('mins','เวลาเข้าเต้า (นาที)','number',v.mins)+fld('note','หมายเหตุ','area',v.note)+foot(`saveMilk('${v.id||''}')`))}
+function saveMilk(id){const ml=+val('ml')||0,mins=+val('mins')||0;if(!val('dt'))return bad('กรุณาเลือกวันเวลา');if(ml<0||mins<0)return bad('ค่าต้องไม่ติดลบ');if(!ml&&!mins)return bad('กรุณากรอกปริมาณ (มล.) หรือเวลาเข้าเต้า (นาที)');upsert('milk',{id:id||uid(),baby:baby().id,dt:val('dt'),type:val('type'),ml:ml||'',mins:mins||'',note:val('note')})}
+function vMilk(){const l=mine('milk').sort((a,b)=>b.dt.localeCompare(a.dt)),ds=days(7),f=mine('food').filter(x=>x.dt.startsWith(today()));return `<div class="row sp"><h2>บันทึกการกินนม</h2><div class="row"><button class="btn p" onclick="editMilk()">+ นม</button><button class="btn" onclick="editFood()">+ อาหาร</button></div></div><div class="card"><h3>วันนี้: นม ${milkToday().length} ครั้ง · อาหาร ${f.length} มื้อ</h3><p class="mut">ปริมาณนม (มล.) 7 วันล่าสุด</p>${chartH(ds.map(d=>l.filter(m=>m.dt.startsWith(d)).reduce((s,m)=>s+(+m.ml||0),0)),ds.map(dl),'')}</div><div class="card">${l.length?l.slice(0,40).map(m=>`<div class="item"><div class="ill" style="width:56px;height:56px;font-size:28px">🍼</div><div style="flex:1"><b>${esc(m.type)}</b> <span class="mut">${fmt(m.dt)}</span><div>${m.ml?m.ml+' มล. ':''}${m.mins?m.mins+' นาที':''}</div>${m.note?`<div class="mut">${esc(m.note)}</div>`:''}<div class="row"><button class="btn g s" onclick="editMilk('${m.id}')">แก้ไข</button><button class="btn d s" onclick="del('milk','${m.id}')">ลบ</button></div></div></div>`).join(''):'<p class="mut">ยังไม่มีบันทึกการกินนม</p>'}</div>`}
+// doctor appointments
+function apptRem(){const o=[];mine('appt').forEach(a=>{if(a.status!=='นัดไว้')return;const n=dd(a.date),t=a.time?' เวลา '+a.time+' น.':'',w=esc(a.dr||a.reason);if(n<0)o.push(`📅 เลยวันนัดหมอ ${w} (${a.date}) กรุณาอัปเดตสถานะหรือนัดใหม่`);else if(n<=7)o.push(`📅 นัดหมอ ${w} ${n===0?'วันนี้':n===1?'พรุ่งนี้':'อีก '+n+' วัน'}${t}`)});return o}
+function editAppt(id){const v=db.appt.find(x=>x.id===id)||{};modal(`<h2>${id?'แก้ไขนัดหมอ':'บันทึกนัดหมอ'}</h2>`+fld('date','วันที่นัด','date',v.date||today(),0,1)+fld('time','เวลา','time',v.time)+fld('dr','แพทย์ / โรงพยาบาล / คลินิก','text',v.dr,0,1)+fld('reason','เรื่องที่นัด (เช่น ตรวจพัฒนาการ ติดตามอาการแพ้)','text',v.reason,0,1)+fld('status','สถานะ','select',v.status,APPT_ST)+fld('prep','สิ่งที่ต้องเตรียม / คำถามถึงหมอ','area',v.prep)+fld('note','หมายเหตุ / ผลการนัด','area',v.note)+foot(`saveAppt('${v.id||''}')`))}
+const APPT_ST=['นัดไว้','ไปแล้ว','ยกเลิก'];
+function saveAppt(id){const date=val('date'),dr=val('dr'),reason=val('reason');if(!date)return bad('กรุณาเลือกวันที่นัด');if(!dr)return bad('กรุณากรอกชื่อแพทย์หรือสถานพยาบาล');if(!reason)return bad('กรุณากรอกเรื่องที่นัด');upsert('appt',{id:id||uid(),baby:baby().id,date,time:val('time'),dr,reason,status:val('status'),prep:val('prep'),note:val('note')})}
+function doneAppt(id){const a=db.appt.find(x=>x.id===id);a.status='ไปแล้ว';save();render();toast('อัปเดตแล้ว')}
+const apptRow=a=>`<div class="item"><div class="ill" style="width:56px;height:56px;font-size:28px">📅</div><div style="flex:1"><b>${esc(a.reason)}</b> <span class="tag ${a.status==='ไปแล้ว'?'ok':a.status==='ยกเลิก'?'':'w'}">${a.status}</span><div class="mut">${a.date}${a.time?' · '+a.time+' น.':''} · ${esc(a.dr)}</div>${a.prep?`<div>เตรียม: ${esc(a.prep)}</div>`:''}${a.note?`<div class="mut">${esc(a.note)}</div>`:''}<div class="row">${a.status==='นัดไว้'?`<button class="btn s" onclick="doneAppt('${a.id}')">ไปแล้ว</button>`:''}<button class="btn g s" onclick="editAppt('${a.id}')">แก้ไข</button><button class="btn d s" onclick="del('appt','${a.id}')">ลบ</button></div></div></div>`;
+function vAppt(){const l=mine('appt'),up=l.filter(a=>a.status==='นัดไว้').sort((a,b)=>a.date.localeCompare(b.date)),h=l.filter(a=>a.status!=='นัดไว้').sort((a,b)=>b.date.localeCompare(a.date)),r=apptRem();return `<div class="row sp"><h2>นัดหมอ</h2><button class="btn p" onclick="editAppt()">+ เพิ่มนัด</button></div>${r.map(x=>`<div class="alert">${x}</div>`).join('')}<div class="card"><h3>นัดที่จะถึง</h3>${up.length?up.map(apptRow).join(''):'<p class="mut">ยังไม่มีนัด กด “+ เพิ่มนัด” เพื่อบันทึก</p>'}</div><div class="card"><h3>ประวัติการนัด</h3>${h.length?h.map(apptRow).join(''):'<p class="mut">ยังไม่มีประวัติ</p>'}</div>`}
+render();
+</script></body></html>
